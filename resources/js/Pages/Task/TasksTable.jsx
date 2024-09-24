@@ -89,9 +89,9 @@ export default function TasksTable({
                 <img src={task.image_path} alt="" style={{ width: 60 }} />
               </td>
               {!hideProjectColumn && (
-                <td className="px-3 py-2">{task.project.name}</td>
+                <td className="px-3 py-2">{task.project.name.substr(0, 10)}</td>
               )}
-              <td className="px-3 py-2">{task.name}</td>
+              <td className="px-3 py-2">{task.name.substr(0, 40)}</td>
               <td className="px-3 py-2">
                 <span
                   className={
