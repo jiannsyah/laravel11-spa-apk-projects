@@ -6,7 +6,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 
 export default function Index({ projects, queryParams = null, success }) {
-  console.log(projects);
+  // console.log(projects);
   queryParams = queryParams || {};
   const searchFieldChange = (name, value) => {
     queryParams.page = 1;
@@ -22,6 +22,13 @@ export default function Index({ projects, queryParams = null, success }) {
     if (e.key !== "Enter") return;
 
     searchFieldChange(name, e.target.value);
+  };
+  const deleteProject = (project) => {
+    if (!window.confirm("Are you sure want to delete the project?")) {
+      return;
+    }
+    // console.log("berhasil");
+    router.delete(route("project.destroy", project.id));
   };
   return (
     <AuthenticatedLayout
@@ -136,12 +143,12 @@ export default function Index({ projects, queryParams = null, success }) {
                         >
                           Edit
                         </Link>
-                        <Link
-                          href={route("project.destroy", project.id)}
+                        <button
+                          onClick={(e) => deleteProject(project)}
                           className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
                         >
                           Delete
-                        </Link>
+                        </button>
                       </td>
                     </tr>
                   ))}
