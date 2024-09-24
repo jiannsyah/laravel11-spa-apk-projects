@@ -1,14 +1,15 @@
+import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 
 export default function Index({ projects }) {
   return (
     <AuthenticatedLayout
-      header={
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          Projects
-        </h2>
-      }
+    // header={
+    //   <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+    //     Projects
+    //   </h2>
+    // }
     >
       <Head title="Projects" />
 
@@ -31,7 +32,10 @@ export default function Index({ projects }) {
                 </thead>
                 <tbody>
                   {projects.data.map((project) => (
-                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr
+                      key={project.id}
+                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                    >
                       <td className="px-3 py-2">{project.id}</td>
                       <td className="px-3 py-2">
                         <img
@@ -63,6 +67,7 @@ export default function Index({ projects }) {
                   ))}
                 </tbody>
               </table>
+              <Pagination links={projects.meta.links} />
             </div>
           </div>
         </div>
