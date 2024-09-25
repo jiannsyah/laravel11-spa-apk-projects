@@ -8,11 +8,15 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProjectResource extends JsonResource
 {
+    public static $wrap = false;
+    //agar data yang muncul tidak data:{} tapi langsung {} 
+
     /**
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
      */
+
     public function toArray(Request $request): array
     {
         return [
