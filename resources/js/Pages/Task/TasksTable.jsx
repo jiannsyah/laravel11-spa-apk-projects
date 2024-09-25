@@ -4,7 +4,13 @@ import TextInput from "@/Components/TextInput";
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constant";
 import { Link, router } from "@inertiajs/react";
 
-export default function TasksTable({ tasks, queryParams = null }) {
+export default function TasksTable({
+  tasks,
+  queryParams = null,
+  hideProjectColumn = false,
+  detail = false,
+  id_detail = 1,
+}) {
   queryParams = queryParams || {};
   const searchFieldChange = (name, value) => {
     queryParams.page = 1;
@@ -13,10 +19,11 @@ export default function TasksTable({ tasks, queryParams = null }) {
     } else {
       delete queryParams[name];
     }
-
-    router.get(route("task.index"), queryParams);
+    detail
+      ? router.get(route("project.show", id_detail), queryParams)
+      : router.get(route("task.index"), queryParams);
   };
-  //   console.log(queryParams);
+  // console.log(queryParams);
 
   const onKeyPress = (name, e) => {
     if (e.key !== "Enter") return;
@@ -30,6 +37,7 @@ export default function TasksTable({ tasks, queryParams = null }) {
           <tr className="text-nowrap">
             <th className="px-3 py-3">ID</th>
             <th className="px-3 py-3">Image</th>
+            {!hideProjectColumn && <th className="px-3 py-3">Project Name</th>}
             <th className="px-3 py-3">Name</th>
             <th className="px-3 py-3">Status</th>
             <th className="px-3 py-3">Create Date</th>
@@ -42,6 +50,7 @@ export default function TasksTable({ tasks, queryParams = null }) {
           <tr className="text-nowrap">
             <th className="px-3 py-3"></th>
             <th className="px-3 py-3"></th>
+            {!hideProjectColumn && <th className="px-3 py-3"></th>}
             <th className="px-3 py-3">
               <TextInput
                 defaultValue={queryParams.name}
@@ -79,7 +88,10 @@ export default function TasksTable({ tasks, queryParams = null }) {
               <td className="px-3 py-2">
                 <img src={task.image_path} alt="" style={{ width: 60 }} />
               </td>
-              <td className="px-3 py-2">{task.name}</td>
+              {!hideProjectColumn && (
+                <td className="px-3 py-2">{task.project.name.substr(0, 10)}</td>
+              )}
+              <td className="px-3 py-2">{task.name.substr(0, 40)}</td>
               <td className="px-3 py-2">
                 <span
                   className={
@@ -90,8 +102,8 @@ export default function TasksTable({ tasks, queryParams = null }) {
                   {TASK_STATUS_TEXT_MAP[task.status]}
                 </span>
               </td>
-              <td className="px-3 py-2">{task.created_at}</td>
-              <td className="px-3 py-2">{task.due_date}</td>
+              <td className="px-3 py-2 text-xs">{task.created_at}</td>
+              <td className="px-3 py-2 text-xs">{task.due_date}</td>
               <td className="px-3 py-2">{task.created_by.name}</td>
               <td className="px-3 py-2">
                 <Link
